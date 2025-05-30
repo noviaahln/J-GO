@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:j_go/themes/bottom_navbar.dart';
-
 class BerandaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -41,9 +39,9 @@ class BerandaScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Icon(Icons.notifications, color: Colors.white),
+                Icon(Icons.message  , color: Colors.white),
                 const SizedBox(width: 16),
-                Icon(Icons.message, color: Colors.white),
+                Icon(Icons.notifications, color: Colors.white),
               ],
             ),
           ),
