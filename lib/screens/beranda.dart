@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import '../screens/lacakDriver.dart'; // Pastikan file ini ada dan sesuai
+
 class BerandaScreen extends StatelessWidget {
+  const BerandaScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +22,7 @@ class BerandaScreen extends StatelessWidget {
         ),
         toolbarHeight: 70,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(70.0),
+          preferredSize: const Size.fromHeight(70.0),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 10.0),
             child: Row(
@@ -27,7 +33,7 @@ class BerandaScreen extends StatelessWidget {
                       hintText: 'Cari',
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         vertical: 12.0,
                         horizontal: 16.0,
                       ),
@@ -39,21 +45,21 @@ class BerandaScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Icon(Icons.message  , color: Colors.white),
+                const Icon(Icons.message, color: Colors.white),
                 const SizedBox(width: 16),
-                Icon(Icons.notifications, color: Colors.white),
+                const Icon(Icons.notifications, color: Colors.white),
               ],
             ),
           ),
         ),
       ),
 
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Mau naik apa?',
               style: TextStyle(
                 color: Colors.black,
@@ -61,12 +67,14 @@ class BerandaScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+
+            // Tombol J-Ride dan J-Car
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 150, // ⬅️ atur lebar kotak J-Ride
+                  width: 150,
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
@@ -74,21 +82,24 @@ class BerandaScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 20), // ⬅️ cukup vertical aja
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Image.asset('assets/j-ride.png', height: 40),
-                        SizedBox(height: 8),
-                        Text('J-Ride', style: TextStyle(color: Colors.white)),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'J-Ride',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(width: 16), // ⬅️ jarak antar tombol
+                const SizedBox(width: 16),
                 SizedBox(
-                  width: 150, // ⬅️ atur lebar kotak J-Car sama kayak J-Ride
+                  width: 150,
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
@@ -96,14 +107,17 @@ class BerandaScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Image.asset('assets/j-car.png', height: 40),
-                        SizedBox(height: 8),
-                        Text('J-Car', style: TextStyle(color: Colors.white)),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'J-Car',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ],
                     ),
                   ),
@@ -111,9 +125,9 @@ class BerandaScreen extends StatelessWidget {
               ],
             ),
 
+            const SizedBox(height: 30),
 
-            SizedBox(height: 20),
-            Text(
+            const Text(
               'Lacak posisi driver!',
               style: TextStyle(
                 color: Colors.black,
@@ -121,15 +135,88 @@ class BerandaScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
+            const SizedBox(height: 10),
+
+            // PETA MINI YANG BISA DIKLIK
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LocationMapScreen(),
+                  ),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                ),
+                width: double.infinity,
+                height: 200,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: FlutterMap(
+                    options: MapOptions(
+                      initialCenter: LatLng(
+                        -7.797068,
+                        110.370529,
+                      ), // Yogyakarta
+                      initialZoom: 15,
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'com.example.app',
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            width: 40,
+                            height: 40,
+                            point: LatLng(-7.797068, 110.370529),
+                            child: const Icon(
+                              Icons.location_pin,
+                              size: 40,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              width: double.infinity,
-              height: 200,
-              child: Placeholder(), // Ganti dengan widget peta nanti
+            ),
+
+            const SizedBox(height: 12),
+
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LocationMapScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: 30,
+                  ),
+                ),
+                child: const Text(
+                  'Lihat Peta',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
             ),
           ],
         ),
